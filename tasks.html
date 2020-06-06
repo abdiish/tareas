@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <!-- production version, optimized for size and speed -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- semantic UI -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div id="appTasks" class="ui container">
+        <br>
+        <br>
+        <div class="ui fluid right action input">
+            <input type="text" placeholder="Ingrese el nombre de una tarea" autofocus v-on:keyup.enter="addTask" v-model="txtTask">
+            <button class="ui teal right labeled icon button" v-on:click="addTask">
+                <i class="add square icon"></i>
+                Guardar
+            </button>
+        </div>
+
+        <ul id="list" v-for="task in listTasks">
+            <li>
+                <div class="ui clearing red segment" v-bind:class="{disabled:task.checked}">
+                    <input type="checkbox" v-model="task.checked">
+                    <label class="ui label teal horizontal" v-bind:class="{disabled:task.checked}">{{task.texto}}</label>
+                    <button class="mini ui red right floated button"  v-on:click="deleteTask(task)">
+                        <i class="remove icon"></i>
+                        Eliminar 
+                    </button>
+                </div> 
+            </li>
+        </ul>
+    </div>
+    <script>
+        new Vue({
+            el:"#appTasks",
+            data:{
+                txtTask: "",
+                listTasks:[]
+            },
+            methods: {
+                //Add Task
+                addTask: function () {
+                    var task = this.txtTask.trim(); //Se obtiene la tarea ingresada en el input y se asigna a una variable
+                    //Comprobar si hay tareas
+                    if (task) {
+                        this.listTasks.push({
+                            texto: task,
+                            checked: false
+                        });
+                    } 
+                    this.txtTask="";
+                    //alert("Tarea agregada");
+                    console.log(this.listTasks);
+                },
+                deleteTask: function (task) {
+                    var index = this.listTasks.indexOf(task); //indexOf(retorna el primer indice, retorna -1 si el elemento no esta)
+                    this.listTasks.splice(index, 1);//cambia contenido del array eliminando elementos existentes
+                }
+            }
+        });
+    </script>
+</body>
+</html>
